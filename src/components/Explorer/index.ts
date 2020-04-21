@@ -7,6 +7,7 @@ import BlockDetails from './blockDetails';
 import NodeInfo from './nodeInfo';
 import {User} from '../../models/user';
 import Loader from '../Common/loader';
+import polkaDot from '../../models/polkadot';
 
 const postView = ({ title, body }: {title: string, body: string}) => m('div', [
 	m('h2', title),
@@ -19,6 +20,8 @@ const Explorer = () => {
 
 	return {
 		async oninit() {
+		  await polkaDot.set();
+		  await polkaDot.setValidatorCount();
 			await user.LoadList();
 		},
 		view: () => {
@@ -38,6 +41,9 @@ const Explorer = () => {
 								m('h3',
 									tab.label
 								),
+                m('h3',
+                  `Validators ${polkaDot.validatorCount}`
+                ),
 								m(Loader, {loading: user.loading}),
 
 								user.error ? m('p', user.error) : user.list.map(postView),
