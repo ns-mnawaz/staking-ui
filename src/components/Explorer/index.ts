@@ -20,7 +20,7 @@ const Explorer = () => {
 
 	return {
 		async oninit() {
-		  await polkaDot.set();
+		  await polkaDot.set('wss://kusama-rpc.polkadot.io/');
 		  await polkaDot.setValidatorCount();
 			await user.LoadList();
 		},
