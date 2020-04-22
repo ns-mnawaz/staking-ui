@@ -1,10 +1,19 @@
-import {ApiPromise, WsProvider} from '@polkadot/api';
+import {ApiPromise} from '@polkadot/api';
+import apiConfig from '../apiConfig';
+
 let instance: any = null;
 
-async function createInstance (url: string): Promise<ApiPromise> {
+async function createInstance (): Promise<ApiPromise> {
 	if (instance === null) {
-		const wsProvider = new WsProvider(url);
-		instance = await ApiPromise.create({provider: wsProvider});
+		const api = await ApiPromise.create(apiConfig);
+
+		// const ready = await api.isReady;
+		// const count = await api.query.staking.validatorCount();
+		//
+		// console.log('ready : ', ready);
+		// console.log('count : ', count);
+
+		instance = api;
 	}
 	return instance;
 }
@@ -20,15 +29,19 @@ export class API implements Interface {
 	loading: boolean;
 	api: ApiPromise;
 	staking: any;
+	session: any;
 
 	constructor() {
 		this.loading = false;
 		this.api = new ApiPromise();
 	}
 
-	async set(url?: string) {
-		url = url || 'ws://127.0.0.1:9944';
-		this.api = await createInstance(url);
+	async set(url?: string) { this.loading = true;
+		this.api = await createInstance();
+		this.staking = this.api.query.staking;
+		this.session = this.api.query.session;
+
+		this.loading = false;
 	}
 
 }

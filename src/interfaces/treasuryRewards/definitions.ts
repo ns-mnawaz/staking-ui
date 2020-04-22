@@ -1,5 +1,5 @@
 export default {
-  types: {
-    Balance2: 'u128',
-  }
+	types: {
+		Balance2: 'u128',
+	}
 };

@@ -19,10 +19,11 @@ const Explorer = () => {
 	const user = new User(false);
 
 	return {
-		async oninit() {
-		  await polkaDot.set('wss://kusama-rpc.polkadot.io/');
-		  await polkaDot.setValidatorCount();
+		async oninit() {  await polkaDot.set('wss://kusama-rpc.polkadot.io/');
+			await polkaDot.setValidatorCount();
+			await polkaDot.setValidators();
 			await user.LoadList();
+
 		},
 		view: () => {
 			const tab = model.getCurrentTab();
@@ -41,9 +42,9 @@ const Explorer = () => {
 								m('h3',
 									tab.label
 								),
-                m('h3',
-                  `Validators ${polkaDot.validatorCount}`
-                ),
+								m('h3',
+									`Validators ${polkaDot.validatorCount}`
+								),
 								m(Loader, {loading: user.loading}),
 
 								user.error ? m('p', user.error) : user.list.map(postView),
