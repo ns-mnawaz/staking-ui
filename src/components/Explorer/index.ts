@@ -9,29 +9,19 @@ import {User} from '../../models/user';
 import Loader from '../Common/loader';
 import polkaDot from '../../models/polkadot';
 
-const postView = ({ title, body }: {title: string, body: string}) => m('div', [
-	m('h2', title),
-	m('p', body)
-]);
-
 const Explorer = () => {
 	const model = new Model(0);
 	const user = new User(false);
 
 	return {
 		async oninit() {
-		  // await polkaDot.set('wss://kusama-rpc.polkadot.io/');
-			// await polkaDot.setValidatorCount();
-			// await polkaDot.setValidators();
-
-
+		  await polkaDot.set();
 		},
 		view: () => {
 			const tab = model.getCurrentTab();
 			return m('.home',
 				m(Nav),
 				m('.main',
-
 					m('div.padding-10p', [
 						m(Tabs, {
 							tabs: model.getTabs(),

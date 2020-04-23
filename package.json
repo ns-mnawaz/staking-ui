@@ -23,6 +23,7 @@
   "author": "mir-nawaz",
   "license": "MIT",
   "dependencies": {
+    "@mithril-icons/font-awesome": "^1.2.0",
     "@polkadot/api": "^1.11.2",
     "@polkadot/typegen": "^1.11.2",
     "mithril": "^2.0.4",
