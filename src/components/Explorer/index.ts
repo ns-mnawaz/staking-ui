@@ -19,10 +19,11 @@ const Explorer = () => {
 	const user = new User(false);
 
 	return {
-		async oninit() {  await polkaDot.set('wss://kusama-rpc.polkadot.io/');
-			await polkaDot.setValidatorCount();
-			await polkaDot.setValidators();
-			await user.LoadList();
+		async oninit() {
+		  // await polkaDot.set('wss://kusama-rpc.polkadot.io/');
+			// await polkaDot.setValidatorCount();
+			// await polkaDot.setValidators();
+
 
 		},
 		view: () => {
@@ -39,28 +40,15 @@ const Explorer = () => {
 						}),
 						m('.main-tab-content',
 							[
-								m('h3',
-									tab.label
-								),
-								m('h3',
-									`Validators ${polkaDot.validatorCount}`
-								),
 								m(Loader, {loading: user.loading}),
 
-								user.error ? m('p', user.error) : user.list.map(postView),
+							// 	user.error ? m('p', user.error) : user.list.map(postView),
 
 								tab.id === 'chain_info' && m(ChainInfo),
 								tab.id === 'block_details' && m(BlockDetails),
 								tab.id === 'node_info' && m(NodeInfo),
 							]
 						)
-					]),
-					m('.layout.horizontal', [
-						m('.flex.one'),
-						m('.flex.three',
-							m('input')
-						),
-						m('.flex.one')
 					])
 				)
 			);

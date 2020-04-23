@@ -22,6 +22,8 @@ interface Interface {
 	loading: boolean;
 	api: ApiPromise;
 	staking: any;
+	session: any;
+	system: any;
 	set(url: string): void
 }
 
@@ -30,6 +32,7 @@ export class API implements Interface {
 	api: ApiPromise;
 	staking: any;
 	session: any;
+	system: any;
 
 	constructor() {
 		this.loading = false;
@@ -40,6 +43,7 @@ export class API implements Interface {
 		this.api = await createInstance();
 		this.staking = this.api.query.staking;
 		this.session = this.api.query.session;
+		this.system = this.api.rpc.system;
 
 		this.loading = false;
 	}
