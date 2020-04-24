@@ -7,16 +7,12 @@ import BlockDetails from './blockDetails';
 import NodeInfo from './nodeInfo';
 import {User} from '../../models/user';
 import Loader from '../Common/loader';
-import polkaDot from '../../models/polkadot';
 
 const Explorer = () => {
 	const model = new Model(0);
 	const user = new User(false);
 
 	return {
-		async oninit() {
-		  await polkaDot.set();
-		},
 		view: () => {
 			const tab = model.getCurrentTab();
 			return m('.home',

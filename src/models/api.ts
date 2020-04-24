@@ -1,19 +1,25 @@
-import {ApiPromise} from '@polkadot/api';
-import apiConfig from '../apiConfig';
+import {ApiPromise, WsProvider} from '@polkadot/api';
 
 let instance: any = null;
 
 async function createInstance (): Promise<ApiPromise> {
 	if (instance === null) {
 	  try {
-	    console.log(' iinsta');
-			const api = await ApiPromise.create(apiConfig);
+			console.log(' iinsta');
+			const URL_KUSAMA = 'wss://kusama-rpc.polkadot.io/';
+			const URL_LOCAL = 'ws://127.0.0.1:9944';
+			// Construct
+			const wsProvider = new WsProvider(URL_LOCAL);
 
-			// const ready = await api.isReady;
-			// const count = await api.query.staking.validatorCount();
-			//
-			// console.log('ready : ', ready);
-			// console.log('count : ', count);
+			const api = await ApiPromise.create({ provider: wsProvider });
+
+			const ready = await api.isReady;
+
+			console.log('ready : ', ready);
+
+			const count = await api.query.staking.validatorCount();
+
+			console.log('count : ', count.toHuman());
 			await api.isReady;
 			instance = api;
 		} catch (e) {
@@ -21,43 +27,26 @@ async function createInstance (): Promise<ApiPromise> {
 		}
 
 	}
+
+	console.log('---- return instance', instance);
+
 	return instance;
 }
 
 interface Interface {
-	loading: boolean;
 	api: ApiPromise;
-	staking: any;
-	session: any;
-	system: any;
 	set(url: string): void
 }
 
 export class API implements Interface {
-	loading: boolean;
 	api: ApiPromise;
-	staking: any;
-	session: any;
-	system: any;
-	chain: any;
 
 	constructor() {
-		this.loading = false;
 		this.api = new ApiPromise();
 	}
 
 	async set() {
-	  this.loading = true;
-
 		this.api = await createInstance();
-		await this.api.isReady;
-
-		this.staking = this.api.query.staking;
-		this.session = this.api.query.session;
-		this.system = this.api.rpc.system;
-		this.chain = this.api.rpc.chain;
-
-		this.loading = false;
 	}
 
 }

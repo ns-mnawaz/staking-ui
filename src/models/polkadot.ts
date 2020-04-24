@@ -2,54 +2,36 @@
 import { API } from './api';
 
 class PolkaDot extends API {
-	validatorCount: string;
-	chainName: string;
-	validators: string[];
-	lastBlockNo: string;
 
 	constructor() {
 		super();
-		this.validatorCount = '0';
-		this.validators = [];
-		this.chainName = '';
-		this.lastBlockNo = '0000000';
 	}
 
 	async setValidatorCount(): Promise<string> {
-		this.loading = true;
-		const count = await this.staking.validatorCount();
-		this.loading = false;
-		this.validatorCount = count.toHuman();
-		return this.validatorCount;
+
+		const count = await this.api.query.staking.validatorCount();
+
+		return count.toHuman();
 	}
 
-	async setValidators(): Promise<string[]> {
-		this.loading = true;
+	async setValidators(): Promise<any> {
 
-		const list = await this.session.validators();
-		this.validators = list.toHuman();
+		const list = await this.api.query.session.validators();
 
-		this.loading = false;
-		return this.validators;
+		return list.toHuman();
 	}
 
-	async setChain(): Promise<string> {
+	async setChain(): Promise<any> {
 
-		this.loading = true;
-		this.chainName = await this.system.chain();
-		this.loading = false;
-
-		return this.chainName;
+		return await this.api.rpc.system.chain();
 	}
 
-	async lastBlock(): Promise<string> {
+	async lastBlock(): Promise<any> {
 
-		this.loading = true;
-		const lastHeader = await this.chain.getHeader();
-		this.lastBlockNo = lastHeader.number.toHuman();
-		this.loading = false;
+		const lastHeader = await this.api.rpc.chain.getHeader();
+		const lastBlockNo = lastHeader.number.toHuman();
 
-		return this.lastBlockNo;
+		return lastBlockNo;
 	}
 
 }
