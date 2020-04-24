@@ -8,11 +8,10 @@ import NodeInfo from './nodeInfo';
 import {User} from '../../models/user';
 import Loader from '../Common/loader';
 
-const Explorer = () => {
-	const model = new Model(0);
-	const user = new User(false);
+const model = new Model(0);
+const user = new User(false);
 
-	return {
+const Explorer: m.Component = {
 		view: () => {
 			const tab = model.getCurrentTab();
 			return m('.home',
@@ -40,7 +39,6 @@ const Explorer = () => {
 			);
 		}
 	};
-};
 
 
 export default Explorer;

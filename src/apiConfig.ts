@@ -8,7 +8,7 @@ import { WsProvider } from '@polkadot/api';
 const apiTypes = Object.values(definitions).reduce((res, types): object => ({ ...res, ...types }), {});
 
 const options: ApiOptions = {
-	provider : new WsProvider(endpoints.KUSAM),
+	provider : new WsProvider(endpoints.LOCAL),
 	types: {
 		...apiTypes,
 		// aliases that don't do well as part of interfaces
