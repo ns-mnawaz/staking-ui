@@ -1,34 +1,23 @@
-import {ApiPromise, WsProvider} from '@polkadot/api';
+import {ApiPromise} from '@polkadot/api';
+import apiConfig from '../apiConfig';
 
 let instance: any = null;
 
 async function createInstance (): Promise<ApiPromise> {
 	if (instance === null) {
 	  try {
-			console.log(' iinsta');
-			const URL_KUSAMA = 'wss://kusama-rpc.polkadot.io/';
-			const URL_LOCAL = 'ws://127.0.0.1:9944';
-			// Construct
-			const wsProvider = new WsProvider(URL_LOCAL);
 
-			const api = await ApiPromise.create({ provider: wsProvider });
-
-			const ready = await api.isReady;
-
-			console.log('ready : ', ready);
-
-			const count = await api.query.staking.validatorCount();
-
-			console.log('count : ', count.toHuman());
+			const api = await ApiPromise.create(apiConfig);
 			await api.isReady;
+
+      console.log('@polkadot/api connection successful.');
+
 			instance = api;
 		} catch (e) {
-	    console.log('--- handle error', e);
+	    console.error('@polkadot/api connection error.', e);
 		}
 
 	}
-
-	console.log('---- return instance', instance);
 
 	return instance;
 }

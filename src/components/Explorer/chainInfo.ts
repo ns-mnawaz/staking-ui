@@ -54,15 +54,10 @@ const ChainInfo = () => {
 	};
 
 	return {
-	  async oninit() {
 
-		},
 		async oncreate() {
-	    console.log('model');
-	    console.log(model);
 			model.loading = true;
 			await polkaDot.set();
-			console.log('---- api set done', polkaDot);
 			const [count, validators, chain, lastBlock] = await Promise.all([
 				polkaDot.setValidatorCount(),
 				polkaDot.setValidators(),
@@ -75,9 +70,6 @@ const ChainInfo = () => {
 			model.chain = chain;
 			model.lastBlock = lastBlock;
 			model.loading = false;
-
-			console.log('-------------------');
-			console.log(model);
 		},
 		view: () => {
 			return m('.row.p-top-24',

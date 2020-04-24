@@ -29,9 +29,8 @@ class PolkaDot extends API {
 	async lastBlock(): Promise<any> {
 
 		const lastHeader = await this.api.rpc.chain.getHeader();
-		const lastBlockNo = lastHeader.number.toHuman();
 
-		return lastBlockNo;
+		return lastHeader.number.toHuman();
 	}
 
 }
