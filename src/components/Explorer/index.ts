@@ -5,11 +5,8 @@ import {Model} from '../../models/explorer';
 import ChainInfo from './chainInfo';
 import BlockDetails from './blockDetails';
 import NodeInfo from './nodeInfo';
-import {User} from '../../models/user';
-import Loader from '../Common/loader';
 
 const model = new Model(0);
-const user = new User(false);
 
 const Explorer: m.Component = {
 		view: () => {
@@ -25,10 +22,6 @@ const Explorer: m.Component = {
 						}),
 						m('.main-tab-content',
 							[
-								m(Loader, {loading: user.loading}),
-
-							// 	user.error ? m('p', user.error) : user.list.map(postView),
-
 								tab.id === 'chain_info' && m(ChainInfo),
 								tab.id === 'block_details' && m(BlockDetails),
 								tab.id === 'node_info' && m(NodeInfo),

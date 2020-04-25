@@ -1,6 +1,6 @@
 import m from 'mithril';
 import { ListTile, List } from 'polythene-mithril'
-import { Search, Shadow, IconButton } from 'polythene-mithril';
+import { Search, Shadow } from 'polythene-mithril';
 import polkaDot from '../../models/polkadot';
 import icons from '../Common/icons';
 import Loader from '../Common/loader';
@@ -20,7 +20,12 @@ const createUserListTile = (title: string, subtitle: string) =>
 		}
 	});
 
-
+const Tile = (title: string, subtitle: string, highSubtitle: string) =>
+  m(ListTile, {
+    title: '0',
+    subtitle: 'Nominators',
+    highSubtitle: '#0000000'
+  });
 
 const model = {
 	count: '0',
@@ -47,15 +52,15 @@ const ChainInfo: m.Component =  {
 
 			await polkaDot.set();
 			const [count, validators, chain, lastBlock] = await Promise.all([
-				polkaDot.setValidatorCount(),
-				polkaDot.setValidators(),
-				polkaDot.setChain(),
-				polkaDot.lastBlock()
+				polkaDot.validatorCount(),
+				polkaDot.validators(),
+				polkaDot.chain(),
+				polkaDot.chainHeader()
 			]);
 
 			model.count = count;
 			model.validators = validators;
-			model.chain = chain.toHuman();
+			model.chain = chain;
 			model.lastBlock = lastBlock;
 			model.loading = false;
 			m.redraw();

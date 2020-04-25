@@ -7,26 +7,28 @@ class PolkaDot extends API {
 		super();
 	}
 
-	async setValidatorCount(): Promise<string> {
+	async validatorCount(): Promise<string> {
 
 		const count = await this.api.query.staking.validatorCount();
 
 		return count.toHuman();
 	}
 
-	async setValidators(): Promise<any> {
+	async validators(): Promise<any> {
 
 		const list = await this.api.query.session.validators();
 
 		return list.toHuman();
 	}
 
-	async setChain(): Promise<any> {
+	async chain(): Promise<any> {
 
-		return await this.api.rpc.system.chain();
+		const name = await this.api.rpc.system.chain();
+
+		return name.toHuman();
 	}
 
-	async lastBlock(): Promise<any> {
+	async chainHeader(): Promise<any> {
 
 		const lastHeader = await this.api.rpc.chain.getHeader();
 

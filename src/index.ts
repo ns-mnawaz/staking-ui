@@ -1,6 +1,7 @@
 // App entry point
 import m from 'mithril';
 import Explorer from './components/Explorer';
+import Validator from './components/Explorer/validator';
 import Staking from './components/Staking';
 import Accounts from './components/Accounts';
 import Council from './components/Council';
@@ -9,7 +10,8 @@ m.route(document.body, '/', {
 	'/': Explorer,
 	'/staking': Staking,
 	'/accounts': Accounts,
-	'/council': Council
+	'/council': Council,
+	'/validator/:id': Validator
 });
 
 ///////////////////////////////////////////////////////////
