@@ -26,7 +26,9 @@
     "@mithril-icons/font-awesome": "^1.2.0",
     "@polkadot/api": "^1.11.2",
     "@polkadot/typegen": "^1.11.2",
+    "@types/lodash": "^4.14.150",
     "mithril": "^2.0.4",
+    "moment": "^2.24.0",
     "polythene-mithril": "^1.7.4"
   },
   "devDependencies": {

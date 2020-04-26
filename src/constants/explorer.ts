@@ -1,9 +1,9 @@
 
 class Explorer {
 	readonly mainButtons = [
-		{ id: 'chain_info', label: 'Chain Info' },
-		{ id: 'block_details', label: 'Block Details' },
-		{ id: 'node_info', label: 'Node Info' }
+		{ id: 'validators_info', label: 'Validators Info' },
+		{ id: 'eras_info', label: 'Eras Info' },
+		{ id: 'members_info', label: 'Members Info' }
 	];
 }
 

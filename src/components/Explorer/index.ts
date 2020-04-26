@@ -2,13 +2,16 @@ import m from 'mithril';
 import Nav from '../Nav';
 import { Tabs } from 'polythene-mithril';
 import {Model} from '../../models/explorer';
-import ChainInfo from './chainInfo';
-import BlockDetails from './blockDetails';
-import NodeInfo from './nodeInfo';
+import Validators from './validators';
+import Eras from './eras';
+import Members from './members';
 
 const model = new Model(0);
 
 const Explorer: m.Component = {
+		oncreate() {
+			window.scrollTo(0, 0);
+		},
 		view: () => {
 			const tab = model.getCurrentTab();
 			return m('.home',
@@ -22,9 +25,9 @@ const Explorer: m.Component = {
 						}),
 						m('.main-tab-content',
 							[
-								tab.id === 'chain_info' && m(ChainInfo),
-								tab.id === 'block_details' && m(BlockDetails),
-								tab.id === 'node_info' && m(NodeInfo),
+								tab.id === 'validators_info' && m(Validators),
+								tab.id === 'eras_info' && m(Eras),
+								tab.id === 'members_info' && m(Members),
 							]
 						)
 					])

@@ -1,81 +1,56 @@
 'use strict';
 const { ApiPromise, WsProvider } = require('@polkadot/api');
 
-(async () => {
-
-  const Alice = '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY';
-  const Bob = '5FHneW46xGXgs5mUiveU4sbTyGBzmstUspZC92UhjJM694ty';
-  const CTRL = 'Cb69hgN9bNWipf6rEGBFeoWt3nocyFQB9XJuJHsLSwdBhyK';
+async function main () {
+  // Create our API with a default connection to the local node
   const URL_KUSAMA = 'wss://kusama-rpc.polkadot.io/';
   const URL_LOCAL = 'ws://127.0.0.1:9944';
 
   // Construct
   const wsProvider = new WsProvider(URL_KUSAMA);
   const api = await ApiPromise.create({ provider: wsProvider });
-  const staking = api.query.staking;
 
-  const validatorCount = await staking.validatorCount();
+  let count = 0;
 
-  console.log('validatorCount: ', validatorCount.toNumber())
+  // Subscribe to the new headers on-chain. The callback is fired when new headers
+  // are found, the call itself returns a promise with a subscription that can be
+  // used to unsubscribe from the newHead subscription
+  const unsubscribe = await api.rpc.chain.subscribeNewHeads((header) => {
+    console.log(`Chain is at block: #${header.number}`);
+    console.log(header.toHuman());
+    console.log(header.toJSON());
+  });
 
-  // Do something
-  console.log(api.genesisHash.toHex());
+  // Subscribe to system events via storage
+  const unsubscribeEvent = await api.query.system.events((events) => {
+    console.log(`\nReceived ${events.length} events:`);
 
-  // The length of an epoch (session) in Babe
-  console.log(api.consts.babe.epochDuration.toNumber());
+    // Loop through the Vec<EventRecord>
+    events.forEach((record) => {
+      // Extract the phase, event and the event types
+      const { event, phase } = record;
+      const types = event.typeDef;
 
-  // Retrieve the last timestamp
-  const now = await api.query.timestamp.now();
+      // Show what we are busy with
+      console.log(`\t${event.section}:${event.method}:: (phase=${phase.toString()})`);
+      console.log(`\t\t${event.meta.documentation.toString()}`);
 
-  console.log(`Now: ${now}`);
+      // Loop through each of the parameters, displaying the type and data
+      event.data.forEach((data, index) => {
+        console.log(`\t\t\t${types[index].type}: ${data.toString()}`);
+      });
+    });
+  });
 
-  // Retrieve the account balance & nonce via the system module
-  const { nonce, data: balance } = await api.query.system.account(Alice);
+  setTimeout(() => {
+    unsubscribe();
+    unsubscribeEvent();
+    console.log('Unsubscribed');
+  }, 20000);
 
-  console.log(`Alice: balance of ${balance.free} and a nonce of ${nonce}`);
+}
 
-  // Retrieve the chain name
-  const chain = await api.rpc.system.chain();
-
-  // Retrieve the latest header
-  const lastHeader = await api.rpc.chain.getHeader();
-
-  const author = await api.query.authorship.author();
-
-  // Log the information
-  console.log(`${chain}: last block #${lastHeader.number} has hash ${lastHeader.hash}`);
-
-  const currentIndex = await api.query.session.currentIndex();
-
-  console.log('currentIndex: ', currentIndex.toHuman());
-  console.log('currentIndex: ', currentIndex.toNumber());
-
-  const validators = await api.query.session.validators();
-
-  const validators1 = await api.query.staking.validators(Alice);
-
-  console.log('validators1: ', validators1.toHuman());
-
-  const validators2 = await api.query.staking.validators(CTRL);
-
-  console.log('validators2: ', validators2.toHuman());
-
-
-  const nominators1  = await api.query.staking.nominators(CTRL);
-  console.log('nominators1: ', nominators1.toHuman());
-
-  const valids = await api.query.session.validators();
-  console.log('valids: ', valids.toHuman());
-
-  for(let valid of valids.toHuman()){
-    console.log(valid);
-    const nomi  = await api.query.staking.nominators(valid);
-    console.log('nomi: ', nomi.toHuman());
-  }
-  // const unsub = await api.query.timestamp.now((moment) => {
-  //   console.log(`The last block has a timestamp of ${moment}`);
-  // });
-
-  process.exit();
-})();
-
+main().catch((error) => {
+  console.error(error);
+  process.exit(-1);
+});

@@ -2,13 +2,14 @@ import * as definitions from './interfaces/definitions';
 import endpoints from './constants/url';
 
 import { ApiOptions } from '@polkadot/api/types';
+import config from './config';
 
 import { WsProvider } from '@polkadot/api';
 
 const apiTypes = Object.values(definitions).reduce((res, types): object => ({ ...res, ...types }), {});
 
 const options: ApiOptions = {
-	provider : new WsProvider(endpoints.LOCAL),
+	provider : new WsProvider(config.edgeware.ENDPOINT),
 	types: {
 		...apiTypes,
 		// aliases that don't do well as part of interfaces

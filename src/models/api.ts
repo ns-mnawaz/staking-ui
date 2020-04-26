@@ -6,13 +6,14 @@ let instance: any = null;
 async function createInstance (): Promise<ApiPromise> {
 	if (instance === null) {
 
-	  try {
-	    const api = await ApiPromise.create(apiConfig);
+	try { const api = await ApiPromise.create(apiConfig);
 			await api.isReady;
 			console.log('@polkadot/api connection successful.'); // tslint:disable-line no-console
 			instance = api;
-		} catch (e) {
-	    console.error('@polkadot/api connection error.', e); // tslint:disable-line no-console
+		} catch (e) { console.error('@polkadot/api connection error.', e); // tslint:disable-line no-console
+			console.log('@polkadot/api connection retrying '); // tslint:disable-line no-console
+
+			await createInstance();
 		}
 
 	}

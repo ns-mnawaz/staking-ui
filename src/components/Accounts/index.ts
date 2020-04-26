@@ -3,24 +3,20 @@ import Nav from '../Nav';
 import { Button } from 'polythene-mithril';
 
 const Staking: m.Component = {
+	oncreate() {
+		window.scrollTo(0, 0);
+	},
 	view: () => m('.accounts',
 		m(Nav),
 		m('.main',
 			m('div.padding-10p',
 				m('h1', 'Accounts'),
-				m('p', 'This is the about page. Stuff about the app.'),
-				m('.test', 'This div tests flex styles and autoprefixer.'),
+				m('p', 'Coming Soon'),
 				m(Button, {
-					label: 'Staking',
+					label: 'Explore',
 					element: m.route.Link,
-					style: {
-						backgroundColor: '#ff9800',
-						color: '#000'
-					},
 					raised: true,
-					url: {
-						href: '/staking',
-					}
+					url: { href: '/' }
 				})
 			)
 		)

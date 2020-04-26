@@ -1,17 +1,23 @@
 import m from 'mithril';
 import Nav from '../Nav';
+import { Button } from 'polythene-mithril';
 
 const Staking: m.Component = {
+	oncreate() {
+		window.scrollTo(0, 0);
+	},
 	view: () => m('.council',
 		m(Nav),
 		m('.main.flex.auto',
 				m('div.padding-10p',
-				m('.flex.one', 'Vertical content 12313'),
-				m('.flex.ten', 'Vertical content 12313'),
-				m('.layout.vertical', 'Vertical content 12313'),
 				m('h1', 'Council'),
-				m('p', 'This is the about page. Stuff about the app.'),
-				m('.test', 'This div tests flex styles and autoprefixer.')
+				m('p', 'Coming Soon'),
+				m(Button, {
+					label: 'Explore',
+					element: m.route.Link,
+					raised: true,
+					url: { href: '/' }
+				})
 			)
 		)
 	)
