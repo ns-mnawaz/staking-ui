@@ -24,16 +24,16 @@ const model = {
 	},
 	identity: {},
 	nominators: [],
-  slash: {
-    spanIndex: '0',
-    lastStart: '0',
-    lastNonzeroSlash: '0',
-    prior: []
-  },
-  reward: {
-	  slashed: '0',
-    paidOut: '0'
-  }
+	slash: {
+		spanIndex: '0',
+		lastStart: '0',
+		lastNonzeroSlash: '0',
+		prior: []
+	},
+	reward: { slashed: '0',
+		paidOut: '0'
+	},
+	keys: []
 };
 
 function formatHeartbeat(milliseconds: number) {
@@ -45,12 +45,13 @@ function formatHeartbeat(milliseconds: number) {
 
 async function apiCall() {
 
-	const [identity, details, nominators, slashes, reward] = await Promise.all([
+	const [identity, details, nominators, slashes, reward, keys] = await Promise.all([
 		polkaDot.identity(model.validator),
 		polkaDot.iamOnline(model.validator),
 		polkaDot.nominators(model.validator),
 		polkaDot.slashes(model.validator),
-		polkaDot.rewards(model.validator)
+		polkaDot.rewards(model.validator),
+		polkaDot.keys(model.validator)
 	]);
 
 	const nominatorList = nominators || [];
@@ -64,7 +65,7 @@ async function apiCall() {
 	slashes.prior = slashes.prior || [];
 	model.slash = slashes;
 	model.reward = reward;
-
+	model.keys = keys || [];
 }
 
 const ChainInfo: m.Component =  {
@@ -164,37 +165,49 @@ const ChainInfo: m.Component =  {
 										})
 									])
 								]),
-                m('.layout.horizontal.p-top-24', [
-                  m('.flex.one',
-                    m(ListTile, {
-                      title: 'Rewards',
-                      subtitle: `Slashed: ${model.reward.slashed}`,
-                      highSubtitle: `Paid Out: ${model.reward.paidOut}`
-                    })
-                  )
-                ]),
-                m('.layout.horizontal.p-top-24', [
-                  m('.flex.one',
-                    m(ListTile, {
-                      title: 'Slashes',
-                      subtitle: `Span Index: ${model.slash.spanIndex}`,
-                      highSubtitle: `Last Slash: ${model.slash.lastStart}`
-                    })
-                  )
-                ]),
-                m('.row.p-top-10', [
-                  m('.component', [
-                    m(List, {
-                      header: {
-                        title: 'Slashes History',
-                        subtitle: `Records [${model.slash.prior.length}]`,
-                        highSubtitle: `Last Nonzero Slash: ${model.slash.lastNonzeroSlash}`
-                      },
-                      border: true,
-                      tiles: model.slash.prior.map((item) => createUserListTile(item, model.validator))
-                    })
-                  ])
-                ])
+								m('.layout.horizontal.p-top-24', [
+									m('.flex.one',
+										m(ListTile, {
+											title: 'Rewards',
+											subtitle: `Slashed: ${model.reward.slashed}`,
+											highSubtitle: `Paid Out: ${model.reward.paidOut}`
+										})
+									)
+								]),
+								m('.layout.horizontal.p-top-24', [
+									m('.flex.one',
+										m(ListTile, {
+											title: 'Slashes',
+											subtitle: `Span Index: ${model.slash.spanIndex}`,
+											highSubtitle: `Last Slash: ${model.slash.lastStart}`
+										})
+									)
+								]),
+								m('.row.p-top-10', [
+									m('.component', [
+										m(List, {
+											header: {
+												title: 'Slashes History',
+												subtitle: `Records [${model.slash.prior.length}]`,
+												highSubtitle: `Last Nonzero Slash: ${model.slash.lastNonzeroSlash}`
+											},
+											border: true,
+											tiles: model.slash.prior.map((item) => createUserListTile(item, model.validator))
+										})
+									])
+								]),
+								m('.row.p-top-44', [
+									m('.component', [
+										m(List, {
+											header: {
+												title: 'Keys',
+												subtitle: `Records [${model.keys.length}]`
+											},
+											border: true,
+											tiles: model.keys.map((key) => createUserListTile(key, model.validator))
+										})
+									])
+								])
 							))
 						)
 					)

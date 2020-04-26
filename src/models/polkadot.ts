@@ -93,15 +93,19 @@ class PolkaDot extends API {
 		const nominators  = await this.api.query.staking.nominators(account);
 		return nominators.toHuman();
 	}
-  async slashes(account: string): Promise<any> {
-    const slash  = await this.api.query.staking.slashingSpans(account);
-    return slash.toHuman();
-  }
-  async rewards(validator: string): Promise<any> {
-    const index =  await this.api.query.session.currentIndex();
-    const rewards  = await this.api.query.staking.spanSlash([validator,index]);
-    return rewards.toHuman();
-  }
+	async slashes(account: string): Promise<any> {
+		const slash  = await this.api.query.staking.slashingSpans(account);
+		return slash.toHuman();
+	}
+	async rewards(validator: string): Promise<any> {
+		const index =  await this.api.query.session.currentIndex();
+		const rewards  = await this.api.query.staking.spanSlash([validator, index]);
+		return rewards.toHuman();
+	}
+	async keys(validator: string): Promise<any> {
+		const keys  = await this.api.query.session.nextKeys(validator);
+		return keys.toHuman();
+	}
 }
 
 export = new PolkaDot();

@@ -16,8 +16,10 @@ async function main () {
 
   for(let validator of validators.toHuman()){
     console.log(validator);
-    const slash  = await api.query.staking.spanSlash([validator,index]);
-    console.log('slash: ', slash.toHuman());
+    const keys  = await api.query.session.nextKeys(validator);
+    console.log('slash: ', keys.toHuman());
+    console.log('slash: ', keys.toJSON());
+    console.log('slash: ', keys.toHex());
   }
 }
 
