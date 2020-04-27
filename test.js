@@ -11,15 +11,15 @@ async function main () {
   const api = await ApiPromise.create({ provider: wsProvider });
   const validators = await api.query.session.validators();
   console.log('validators: ', validators.toHuman());
-  const index =  await api.query.session.currentIndex();
-  console.log('index: ', index.toHuman());
 
   for(let validator of validators.toHuman()){
     console.log(validator);
-    const keys  = await api.query.session.nextKeys(validator);
-    console.log('slash: ', keys.toHuman());
-    console.log('slash: ', keys.toJSON());
-    console.log('slash: ', keys.toHex());
+    const ledger  = await api.query.staking.ledger(validator);
+    const proxy  = await api.query.democracy.proxy(validator);
+    const bonded  = await api.query.staking.bonded(validator);
+    console.log('ledger: ', ledger.toHuman());
+    console.log('proxy: ', proxy.toHuman());
+    console.log('bonded: ', bonded.toString());
   }
 }
 

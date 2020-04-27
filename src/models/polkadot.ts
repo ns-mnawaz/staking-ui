@@ -1,5 +1,6 @@
 
 import { API } from './api';
+import { AnyJson } from '@polkadot/types/types';
 
 class PolkaDot extends API {
 
@@ -105,6 +106,23 @@ class PolkaDot extends API {
 	async keys(validator: string): Promise<any> {
 		const keys  = await this.api.query.session.nextKeys(validator);
 		return keys.toHuman();
+	}
+	async ledger(validator: string): Promise<any> {
+		const ledger  = await this.api.query.staking.ledger(validator);
+		const ledgerHuman = ledger.toHuman() || {};
+
+		const ledgerJSON: AnyJson = ledger.toJSON() || {};
+		// @ts-ignore
+		const active = ledgerJSON.active || 0;
+		// @ts-ignore
+		const total = ledgerJSON.total || 0;
+		// @ts-ignore
+		ledgerHuman.percentage = total !== 0 ? Math.round(active / total * 100).toFixed(2) : '0.0';
+		return ledgerHuman;
+	}
+	async bonded(validator: string): Promise<any> {
+		const bonded  = await this.api.query.staking.bonded(validator);
+		return bonded.toHuman();
 	}
 }
 

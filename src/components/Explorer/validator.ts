@@ -33,7 +33,13 @@ const model = {
 	reward: { slashed: '0',
 		paidOut: '0'
 	},
-	keys: []
+	keys: [],
+	ledger: {
+	  total: '',
+		active: '',
+		lastReward: '',
+		percentage: '0'
+	}
 };
 
 function formatHeartbeat(milliseconds: number) {
@@ -45,13 +51,14 @@ function formatHeartbeat(milliseconds: number) {
 
 async function apiCall() {
 
-	const [identity, details, nominators, slashes, reward, keys] = await Promise.all([
+	const [identity, details, nominators, slashes, reward, keys, ledger] = await Promise.all([
 		polkaDot.identity(model.validator),
 		polkaDot.iamOnline(model.validator),
 		polkaDot.nominators(model.validator),
 		polkaDot.slashes(model.validator),
 		polkaDot.rewards(model.validator),
-		polkaDot.keys(model.validator)
+		polkaDot.keys(model.validator),
+		polkaDot.ledger(model.validator)
 	]);
 
 	const nominatorList = nominators || [];
@@ -65,6 +72,7 @@ async function apiCall() {
 	slashes.prior = slashes.prior || [];
 	model.slash = slashes;
 	model.reward = reward;
+	model.ledger = ledger;
 	model.keys = keys || [];
 }
 
@@ -89,10 +97,18 @@ const ChainInfo: m.Component =  {
 							m('.row.p-top-24',
 							model.loading ? m(Loader, {loading: model.loading}) : m('div',
 									m('.layout.horizontal', [
-										m('.flex.one',
+										m('.flex.four.p-right-6',
 											m(ListTile, {
 												title: 'Validator',
-												subtitle: model.validator
+												subtitle: model.validator,
+												highSubtitle: `Last Reward : ${get(model, 'ledger.lastReward', '0')}`
+											})
+										),
+										m('.flex.one',
+											m(ListTile, {
+												title: `Ledger ${model.ledger.percentage}%`,
+												subtitle: `Active : ${model.ledger.active}`,
+												highSubtitle: ` Total : ${model.ledger.total}`
 											})
 										)
 									]),
