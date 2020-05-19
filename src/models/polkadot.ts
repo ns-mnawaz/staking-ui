@@ -22,9 +22,8 @@ class PolkaDot extends API {
 		const name = await this.api.rpc.system.chain();
 		return name.toHuman();
 	}
-	async chainHeader(): Promise<object> {
-		const lastHeader = await this.api.rpc.chain.getHeader();
-		return { number: lastHeader.number.toHuman(), hash: lastHeader.hash };
+	async chainHeader(): Promise<any> {
+		return await this.api.rpc.chain.getHeader();
 	}
 	async version(): Promise<string> {
 		const version = await this.api.query.staking.storageVersion();

@@ -82,7 +82,7 @@ async function apiCall() {
 	model.validators = validatorList;
 	model.validatorsCopy = validatorList;
 	model.chain = chain;
-	model.lastBlock = lastBlock.number;
+	model.lastBlock = lastBlock.number.toHuman();
 	model.lastBlockHash = lastBlock.hash;
 	model.currentIndex = currentIndex;
 
